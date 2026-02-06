@@ -1,73 +1,37 @@
 import tkinter as tk
-from tkinter import filedialog, messagebox
-from PIL import Image
-import pytesseract
-from pdf2docx import Converter
-import os
+from tkinter import font
 
-# تحديد مسار Tesseract-OCR
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-
-# وظيفة لتحويل الصورة إلى نص
-def convert_image_to_text():
-    file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.jpg;*.png;*.jpeg;*.bmp;*.tiff")])
-    if file_path:
-        try:
-            image = Image.open(file_path)
-            text = pytesseract.image_to_string(image)
-            text_output.delete(1.0, tk.END)
-            text_output.insert(tk.END, text)
-        except Exception as e:
-            messagebox.showerror("Error", f"Failed to convert image: {e}")
-
-# وظيفة لتحويل PDF إلى Word
-def convert_pdf_to_word():
-    file_path = filedialog.askopenfilename(filetypes=[("PDF files", "*.pdf")])
-    if file_path:
-        try:
-            output_path = filedialog.asksaveasfilename(defaultextension=".docx", filetypes=[("Word files", "*.docx")])
-            if output_path:
-                cv = Converter(file_path)
-                cv.convert(output_path, start=0, end=None)
-                cv.close()
-                messagebox.showinfo("Success", "PDF converted to Word successfully!")
-        except Exception as e:
-            messagebox.showerror("Error", f"Failed to convert PDF: {e}")
-
-# وظيفة لحفظ النص كملف Word
-def save_text_as_word():
-    text = text_output.get(1.0, tk.END)
-    if text.strip():
-        file_path = filedialog.asksaveasfilename(defaultextension=".docx", filetypes=[("Word files", "*.docx")])
-        if file_path:
-            try:
-                with open(file_path, 'w', encoding='utf-8') as file:
-                    file.write(text)
-                messagebox.showinfo("Success", "Text saved as Word file successfully!")
-            except Exception as e:
-                messagebox.showerror("Error", f"Failed to save file: {e}")
-    else:
-        messagebox.showwarning("Warning", "No text to save!")
-
-# إنشاء واجهة المستخدم
+# إنشاء النافذة الرئيسية
 root = tk.Tk()
-root.title("Image and PDF to Text Converter")
+root.title("عرض الاسم")
+root.geometry("400x200")
+root.configure(bg='#f0f0f0')
 
-# زر لتحويل الصورة إلى نص
-btn_image_to_text = tk.Button(root, text="Convert Image to Text", command=convert_image_to_text)
-btn_image_to_text.pack(pady=10)
+# إنشاء خط عربي
+try:
+    arabic_font = font.Font(family="Arial", size=40, weight="bold")
+except:
+    arabic_font = font.Font(size=40, weight="bold")
 
-# زر لتحويل PDF إلى Word
-btn_pdf_to_word = tk.Button(root, text="Convert PDF to Word", command=convert_pdf_to_word)
-btn_pdf_to_word.pack(pady=10)
+# إنشاء تسمية لعرض الاسم
+label = tk.Label(
+    root, 
+    text="أيمن", 
+    font=arabic_font,
+    bg='#f0f0f0',
+    fg='#2c3e50'
+)
+label.pack(expand=True)
 
-# زر لحفظ النص كملف Word
-btn_save_word = tk.Button(root, text="Save Text as Word", command=save_text_as_word)
-btn_save_word.pack(pady=10)
+# إضافة تسمية إضافية
+sub_label = tk.Label(
+    root,
+    text="مرحباً بك!",
+    font=("Arial", 16),
+    bg='#f0f0f0',
+    fg='#7f8c8d'
+)
+sub_label.pack()
 
-# مربع نص لعرض النص المستخرج
-text_output = tk.Text(root, height=20, width=80)
-text_output.pack(pady=10)
-
-# تشغيل الواجهة
+# تشغيل التطبيق
 root.mainloop()
