@@ -1,6 +1,1 @@
- tkinter, 
-tkinter , filedialog, messagebox
-, PIL , Image
-, pytesseract
-, pdf2docx 
-, os
+tkinter
